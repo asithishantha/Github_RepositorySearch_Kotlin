@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 YUMEMI Inc. All rights reserved.
+ * 著作権 © 2021 YUMEMI Inc. すべての権利が保護されています。
  */
 package jp.co.yumemi.android.code_check
 
@@ -21,29 +21,37 @@ import java.util.*
 
 /**
  * TwoFragment で使う
+ * OneViewModelは、OneFragmentで使用されるViewModelです。
+ * 検索結果を取得するメソッドを提供します。
  */
 class OneViewModel(
     val context: Context
 ) : ViewModel() {
 
-    // 検索結果
+    /**
+     * 検索結果を取得します。
+     * @param inputText 検索クエリ
+     * @return 検索結果のリスト
+     */
     fun searchResults(inputText: String): List<item> = runBlocking {
+        // HTTPクライアントを初期化します。
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
+            // GitHub APIからリポジトリを検索します。
             val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
                 header("Accept", "application/vnd.github.v3+json")
                 parameter("q", inputText)
             }
 
+            // レスポンスからJSONデータを取得します。
             val jsonBody = JSONObject(response.receive<String>())
-
             val jsonItems = jsonBody.optJSONArray("items")!!
 
             val items = mutableListOf<item>()
 
             /**
-             * アイテムの個数分ループする
+             * アイテムの個数分ループして検索結果をパースします。
              */
             for (i in 0 until jsonItems.length()) {
                 val jsonItem = jsonItems.optJSONObject(i)!!
@@ -52,9 +60,10 @@ class OneViewModel(
                 val language = jsonItem.optString("language")
                 val stargazersCount = jsonItem.optLong("stargazers_count")
                 val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_conut")
+                val forksCount = jsonItem.optLong("forks_count")
                 val openIssuesCount = jsonItem.optLong("open_issues_count")
 
+                // itemオブジェクトを作成してリストに追加します。
                 items.add(
                     item(
                         name = name,
@@ -68,6 +77,7 @@ class OneViewModel(
                 )
             }
 
+            // 検索日時を更新します。
             lastSearchDate = Date()
 
             return@async items.toList()
@@ -75,6 +85,10 @@ class OneViewModel(
     }
 }
 
+/**
+ * リポジトリの情報を表すデータクラスです。
+ * Parcelableを実装しています。
+ */
 @Parcelize
 data class item(
     val name: String,
