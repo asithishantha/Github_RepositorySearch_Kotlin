@@ -1,6 +1,3 @@
-/*
- * Copyright © 2021 YUMEMI Inc. All rights reserved.
- */
 package jp.co.yumemi.android.code_check
 
 import android.os.Bundle
@@ -12,28 +9,48 @@ import coil.load
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.databinding.FragmentTwoBinding
 
+/**
+ * TwoFragment は、リポジトリの詳細を表示するFragmentです。
+ * リポジトリの詳細情報を表示し、検索した日時をログに出力します。
+ */
 class TwoFragment : Fragment(R.layout.fragment_two) {
 
     private val args: TwoFragmentArgs by navArgs()
-
     private var binding: FragmentTwoBinding? = null
-    private val _binding get() = binding!!
 
+    /**
+     * FragmentのViewが生成された時に呼ばれます。
+     * レイアウトのバインディングやリポジトリの詳細情報の表示を行います。
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 検索した日時をログに出力します。
         Log.d("検索した日時", lastSearchDate.toString())
 
         binding = FragmentTwoBinding.bind(view)
 
-        var item = args.item
+        // 引数からリポジトリの詳細情報を取得します。
+        val item = args.item
 
-        _binding.ownerIconView.load(item.ownerIconUrl);
-        _binding.nameView.text = item.name;
-        _binding.languageView.text = item.language;
-        _binding.starsView.text = "${item.stargazersCount} stars";
-        _binding.watchersView.text = "${item.watchersCount} watchers";
-        _binding.forksView.text = "${item.forksCount} forks";
-        _binding.openIssuesView.text = "${item.openIssuesCount} open issues";
+        // リポジトリの詳細情報をビューに表示します。
+        binding?.apply {
+            ownerIconView.load(item.ownerIconUrl)
+            nameView.text = item.name
+            languageView.text = item.language
+            starsView.text = "${item.stargazersCount} stars"
+            watchersView.text = "${item.watchersCount} watchers"
+            forksView.text = "${item.forksCount} forks"
+            openIssuesView.text = "${item.openIssuesCount} open issues"
+        }
+    }
+
+    /**
+     * Fragmentが破棄される際に呼ばれます。
+     * バインディングの解除を行います。
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
