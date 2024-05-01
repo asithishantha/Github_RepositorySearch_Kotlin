@@ -10,17 +10,11 @@ import java.util.*
 class TopActivity : AppCompatActivity(R.layout.activity_top) {
 
     companion object {
-        // アプリケーションで行われた最後の検索の日付を表します。
         private var lastSearchDateInternal: Date? = null
 
-        /**
-         * 行われた最後の検索の日付を取得します。
-         * まだ日付が設定されていない場合、null を返します。
-         */
-        var lastSearchDate: Date
-            get() = lastSearchDateInternal ?: throw UninitializedPropertyAccessException(
-                "lastSearchDate プロパティが初期化されていません"
-            )
+        // 最後の検索日時を安全に取得する
+        var lastSearchDate: Date?
+            get() = lastSearchDateInternal
             set(value) {
                 lastSearchDateInternal = value
             }

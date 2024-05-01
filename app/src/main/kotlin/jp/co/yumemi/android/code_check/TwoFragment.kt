@@ -25,13 +25,8 @@ class TwoFragment : Fragment(R.layout.fragment_two) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 検索した日時をログに出力します。
-        Log.d("検索した日時", lastSearchDate.toString())
-
-        binding = FragmentTwoBinding.bind(view)
-
-        // 引数からリポジトリの詳細情報を取得します。
         val item = args.item
+        binding = FragmentTwoBinding.bind(view)
 
         // リポジトリの詳細情報をビューに表示します。
         binding?.apply {
