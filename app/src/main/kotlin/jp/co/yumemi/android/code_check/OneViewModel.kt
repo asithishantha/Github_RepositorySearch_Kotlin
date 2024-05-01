@@ -5,83 +5,78 @@ package jp.co.yumemi.android.code_check
 
 import android.content.Context
 import android.os.Parcelable
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
 
 /**
  * TwoFragment で使う
- * OneViewModelは、OneFragmentで使用されるViewModelです。
- * 検索結果を取得するメソッドを提供します。
+ * OneFragmentで使用されるViewModelです。
+ * GitHubのAPIを通じてリポジトリの検索結果を取得する機能を提供します。
  */
-class OneViewModel(
-    val context: Context
-) : ViewModel() {
+class OneViewModel: ViewModel() {
+
+    // Add LiveData to publish search results
+    val searchResultsLiveData = MutableLiveData<List<RepositoryItem>>()
+
+    private val client = HttpClient(Android) // HTTPクライアントの初期化。APIリクエストに使用します。
 
     /**
-     * 検索結果を取得します。
-     * @param inputText 検索クエリ
-     * @return 検索結果のリスト
+     * 指定された検索クエリに基づいてGitHubリポジトリを検索し、結果を取得します。
+     * @param inputText 検索クエリ文字列
      */
-    fun searchResults(inputText: String): List<item> = runBlocking {
-        // HTTPクライアントを初期化します。
-        val client = HttpClient(Android)
-
-        return@runBlocking GlobalScope.async {
+    fun searchResults(inputText: String) {
+        viewModelScope.launch {// ViewModelのライフサイクルに紐づいたCoroutineスコープで非同期処理を開始
             // GitHub APIからリポジトリを検索します。
-            val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
-                header("Accept", "application/vnd.github.v3+json")
-                parameter("q", inputText)
+            val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
+                header("Accept", "application/vnd.github.v3+json") // GitHub API v3を指定
+                parameter("q", inputText) // 検索クエリパラメータを追加
             }
 
-            // レスポンスからJSONデータを取得します。
-            val jsonBody = JSONObject(response.receive<String>())
-            val jsonItems = jsonBody.optJSONArray("items")!!
+            val jsonBody = JSONObject(response.receive<String>()) // レスポンスからJSONオブジェクトを生成
+            val jsonItems =
+                jsonBody.optJSONArray("items") ?: return@launch // "items"キーに対応するJSON配列を取得、存在しなければ終了
 
-            val items = mutableListOf<item>()
-
-            /**
-             * アイテムの個数分ループして検索結果をパースします。
-             */
+            val items = mutableListOf<RepositoryItem>()  // 検索結果を格納するためのリスト
             for (i in 0 until jsonItems.length()) {
-                val jsonItem = jsonItems.optJSONObject(i)!!
+                val jsonItem =
+                    jsonItems.optJSONObject(i) ?: continue // 配列内の各要素をJSONObjectとして取得、nullの場合はスキップ
                 val name = jsonItem.optString("full_name")
-                val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
+                val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
                 val language = jsonItem.optString("language")
                 val stargazersCount = jsonItem.optLong("stargazers_count")
                 val watchersCount = jsonItem.optLong("watchers_count")
                 val forksCount = jsonItem.optLong("forks_count")
                 val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                // itemオブジェクトを作成してリストに追加します。
+                // 取得したデータをもとにitemオブジェクトを生成し、リストに追加
                 items.add(
-                    item(
-                        name = name,
-                        ownerIconUrl = ownerIconUrl,
-                        language = context.getString(R.string.written_language, language),
-                        stargazersCount = stargazersCount,
-                        watchersCount = watchersCount,
-                        forksCount = forksCount,
-                        openIssuesCount = openIssuesCount
+                    RepositoryItem(
+                        name,
+                        ownerIconUrl,
+                        language,
+                        stargazersCount,
+                        watchersCount,
+                        forksCount,
+                        openIssuesCount
                     )
                 )
             }
-
-            // 検索日時を更新します。
+            // Update LiveData with the results
+            searchResultsLiveData.postValue(items)
+            // 最後の検索日時を更新
             lastSearchDate = Date()
 
-            return@async items.toList()
-        }.await()
+        }
     }
 }
 
@@ -90,7 +85,7 @@ class OneViewModel(
  * Parcelableを実装しています。
  */
 @Parcelize
-data class item(
+data class RepositoryItem(
     val name: String,
     val ownerIconUrl: String,
     val language: String,
