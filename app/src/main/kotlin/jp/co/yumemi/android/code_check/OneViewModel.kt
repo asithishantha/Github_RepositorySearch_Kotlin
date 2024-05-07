@@ -3,11 +3,11 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
@@ -20,77 +20,96 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * TwoFragment で使う
- * OneFragmentで使用されるViewModelです。
- * GitHubのAPIを通じてリポジトリの検索結果を取得する機能を提供します。
+ * OneViewModelは、GitHubのAPIを通じてリポジトリの検索結果を取得し、
+ * それをLiveDataを通じて公開するViewModelです。
  */
-class OneViewModel: ViewModel() {
+class OneViewModel : ViewModel() {
 
-    // Add LiveData to publish search results
+    // 検索結果を公開するためのLiveDataです。
     val searchResultsLiveData = MutableLiveData<List<RepositoryItem>>()
+    // エラーメッセージを公開するためのLiveDataです。
+    val errorLiveData = MutableLiveData<String>()
 
-    private val client = HttpClient(Android) // HTTPクライアントの初期化。APIリクエストに使用します。
+    // HTTPクライアントの初期化。APIリクエストに使用します。
+    private val client = HttpClient(Android)
 
     /**
-     * 指定された検索クエリに基づいてGitHubリポジトリを検索し、結果を取得します。
+     * GitHubリポジトリを検索し、結果を取得するメソッドです。
      * @param inputText 検索クエリ文字列
      */
     fun searchResults(inputText: String) {
-        viewModelScope.launch {// ViewModelのライフサイクルに紐づいたCoroutineスコープで非同期処理を開始
-            // GitHub APIからリポジトリを検索します。
-            val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
-                header("Accept", "application/vnd.github.v3+json") // GitHub API v3を指定
-                parameter("q", inputText) // 検索クエリパラメータを追加
-            }
+        // ViewModelのライフサイクルに紐づいたCoroutineスコープで非同期処理を開始します。
+        viewModelScope.launch {
+            try {
+                // GitHub APIからリポジトリを検索します。
+                val response: HttpResponse =
+                    client.get("https://api.github.com/search/repositories") {
+                        header("Accept", "application/vnd.github.v3+json") // GitHub API v3を指定します。
+                        parameter("q", inputText) // 検索クエリパラメータを追加します。
+                    }
 
-            val jsonBody = JSONObject(response.receive<String>()) // レスポンスからJSONオブジェクトを生成
-            val jsonItems =
-                jsonBody.optJSONArray("items") ?: return@launch // "items"キーに対応するJSON配列を取得、存在しなければ終了
+                // レスポンスからJSONオブジェクトを生成します。
+                val jsonBody = JSONObject(response.receive<String>())
+                // "items"キーに対応するJSON配列を取得します。存在しなければ終了します。
+                val jsonItems =
+                    jsonBody.optJSONArray("items")
+                        ?: return@launch
 
-            val items = mutableListOf<RepositoryItem>()  // 検索結果を格納するためのリスト
-            for (i in 0 until jsonItems.length()) {
-                val jsonItem =
-                    jsonItems.optJSONObject(i) ?: continue // 配列内の各要素をJSONObjectとして取得、nullの場合はスキップ
-                val name = jsonItem.optString("full_name")
-                val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
-                val language = jsonItem.optString("language")
-                val stargazersCount = jsonItem.optLong("stargazers_count")
-                val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_count")
-                val openIssuesCount = jsonItem.optLong("open_issues_count")
-                // 取得したデータをもとにitemオブジェクトを生成し、リストに追加
-                items.add(
-                    RepositoryItem(
-                        name,
-                        ownerIconUrl,
-                        language,
-                        stargazersCount,
-                        watchersCount,
-                        forksCount,
-                        openIssuesCount
+                // 検索結果を格納するためのリストを作成します。
+                val items = mutableListOf<RepositoryItem>()
+                for (i in 0 until jsonItems.length()) {
+                    // 配列内の各要素をJSONObjectとして取得します。nullの場合はスキップします。
+                    val jsonItem =
+                        jsonItems.optJSONObject(i)
+                            ?: continue
+                    // JSONObjectから必要な情報を取り出します。
+                    val name = jsonItem.optString("full_name")
+                    val ownerIconUrl =
+                        jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
+                    val language = jsonItem.optString("language")
+                    val stargazersCount = jsonItem.getLong("stargazers_count")
+                    val watchersCount = jsonItem.getLong("watchers_count")
+                    val forksCount = jsonItem.getLong("forks_count")
+                    val openIssuesCount = jsonItem.getLong("open_issues_count")
+                    // 取得したデータをもとにRepositoryItemオブジェクトを生成し、リストに追加します。
+                    items.add(
+                        RepositoryItem(
+                            name,
+                            ownerIconUrl,
+                            language,
+                            stargazersCount,
+                            watchersCount,
+                            forksCount,
+                            openIssuesCount
+                        )
                     )
-                )
-            }
-            // Update LiveData with the results
-            searchResultsLiveData.postValue(items)
-            // 最後の検索日時を更新
-            lastSearchDate = Date()
+                }
+                // LiveDataを更新し、検索結果を公開します。
+                searchResultsLiveData.postValue(items)
+                // 最後の検索日時を更新します。
+                lastSearchDate = Date()
 
+            } catch (e: Exception) {
+                // 例外が発生した場合、ログにエラーメッセージを出力します。
+                Log.e("API_REQUEST_ERROR", "APIリクエスト中にエラーが発生しました：${e.message}", e)
+                // エラーメッセージをLiveDataに投稿し、UIに表示させます。
+                errorLiveData.postValue("エラーが発生しました。詳細はログを参照してください。")
+            }
         }
     }
 }
 
 /**
- * リポジトリの情報を表すデータクラスです。
- * Parcelableを実装しています。
+ * GitHubリポジトリの情報を格納するためのデータクラスです。
+ * Parcelableインターフェースを実装しており、インテント間でのデータの受け渡しが可能です。
  */
 @Parcelize
 data class RepositoryItem(
-    val name: String,
-    val ownerIconUrl: String,
-    val language: String,
-    val stargazersCount: Long,
-    val watchersCount: Long,
-    val forksCount: Long,
-    val openIssuesCount: Long,
+    val name: String, // リポジトリ名
+    val ownerIconUrl: String, // オーナーのアイコンURL
+    val language: String, // 使用言語
+    val stargazersCount: Long, // スターの数
+    val watchersCount: Long, // ウォッチャーの数
+    val forksCount: Long, // フォークの数
+    val openIssuesCount: Long, // オープンされているイシューの数
 ) : Parcelable

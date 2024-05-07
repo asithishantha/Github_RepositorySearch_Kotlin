@@ -22,8 +22,8 @@ import jp.co.yumemi.android.code_check.databinding.LayoutItemBinding
 class OneFragment : Fragment() {
     // ViewBindingのインスタンスを保持するプライベート変数です。Viewが破棄された際にはnullに設定されます。
     private var _binding: FragmentOneBinding? = null
-    //    安全にBindingインスタンスにアクセスするためのプロパティです。_bindingがnullの場合、IllegalStateExceptionを投げます。
-    //    これにより、Viewのライフサイクル外でのアクセスを防ぐことができます。
+    // 安全にBindingインスタンスにアクセスするためのプロパティです。_bindingがnullの場合、IllegalStateExceptionを投げます。
+    // これにより、Viewのライフサイクル外でのアクセスを防ぐことができます。
     private val binding get() = _binding ?: throw IllegalStateException("BindingはonCreateViewとonDestroyViewの間でのみアクセス可能です")
 
     override fun onCreateView(
@@ -39,48 +39,62 @@ class OneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ViewModelを初期化
+        // ViewModelを初期化します。
         val viewModel = OneViewModel()
 
-        // CustomAdapterを初期化、アイテムクリック時の処理を定義
+        // CustomAdapterを初期化し、アイテムクリック時の処理を定義します。
         val adapter = CustomAdapter { item ->
-            gotoRepositoryFragment(item)
+            try {
+                gotoRepositoryFragment(item)
+            } catch (e: Exception) {
+                Log.e("OneFragment", "Failed to navigate: ${e.message}")
+            }
         }
 
-        // RecyclerViewの設定
+        // RecyclerViewの設定を行います。
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
         }
 
-        // ViewModelからの検索結果を監視
+        // ViewModelからの検索結果を監視し、変更があった場合にはアダプターに通知します。
         viewModel.searchResultsLiveData.observe(viewLifecycleOwner) { searchResults ->
-            Log.d("OneFragment", "Search results received: ${searchResults.size}")
-            adapter.submitList(searchResults)
+            try {
+                adapter.submitList(searchResults)
+            } catch (e: Exception) {
+                Log.e("OneFragment", "検索結果の解析中にエラーが発生しました: ${e.message}")
+            }
         }
 
-        // 検索ボックスの入力アクションをハンドル
+        // 検索ボックスの入力アクションをハンドルします。
         binding.searchInputText.setOnEditorActionListener { editText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 editText.text?.toString()?.let { query ->
-                    Log.d("OneFragment", "Search query: $query")
-                    viewModel.searchResults(query)
+                    try {
+                        viewModel.searchResults(query)
+                    } catch (e: Exception) {
+                        Log.e("OneFragment", "Search failed: ${e.message}")
+                    }
                 }
-                true // アクションをここで処理
+                true // アクションをここで処理します。
             } else {
-                false // その他のアクションは無視
+                false // その他のアクションは無視します。
             }
         }
 
-        // 検索ボタンに OnClickListener を設定
+        // 検索ボタンに OnClickListener を設定します。
         binding.searchButton.setOnClickListener {
             val query = binding.searchInputText.text.toString()
             if (query.isNotEmpty()) {
-                Log.d("OneFragment", "Search button clicked with query: $query")
-                viewModel.searchResults(query)
+                try {
+                    viewModel.searchResults(query)
+                } catch (e: Exception) {
+                    Log.e("OneFragment", "検索に失敗しました: ${e.message}")
+                }
             }
         }
     }
+
     // 指定されたitemでリポジトリの詳細画面へ遷移するためのメソッドです。
     // Navigation ComponentのActionを使用して遷移を行います。
     private fun gotoRepositoryFragment(item: RepositoryItem) {
@@ -119,8 +133,7 @@ class CustomAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val currentItem = getItem(position)
-        holder.binding.repositoryNameView.text = currentItem.name // Assuming repositoryNameView is the ID of your TextView in layout_item.xml
-        // Bind other data to views as needed
+        holder.binding.repositoryNameView.text = currentItem.name
         holder.itemView.setOnClickListener {
             itemClickListener(currentItem)
         }
