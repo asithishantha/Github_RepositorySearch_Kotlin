@@ -1,5 +1,3 @@
-// File: viewmodel/SearchRepositoriesViewModel.kt
-
 package jp.co.yumemi.android.code_check.viewmodel
 
 import androidx.lifecycle.LiveData
@@ -13,26 +11,50 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * GitHubリポジトリの検索を行い、その結果を管理するViewModel。
+ * GitHubリポジトリの検索結果を管理するViewModel。
+ * リポジトリの状態をLiveDataで公開し、UI層での監視を可能にする。
  */
 @HiltViewModel
 class SearchRepositoriesViewModel @Inject constructor(
-    private val repository: GithubRepository // Hiltによる依存注入でGitHubリポジトリを注入
+    private val repository: GithubRepository  // GitHubリポジトリにアクセスするためのリポジトリクラス
 ) : ViewModel() {
 
-    // リポジトリの状態を保持するLiveData
+    // リポジトリの状態を保持するMutableLiveData
     private val _repositoryState = MutableLiveData<RepositoryState<List<RepositoryItem>>>()
+    // リポジトリの状態を公開するためのLiveData
     val repositoryState: LiveData<RepositoryState<List<RepositoryItem>>> = _repositoryState
 
+    // 最後に成功した検索クエリを保持する変数
+    private var lastSuccessfulQuery: String? = null
+
     /**
-     * 指定されたクエリでGitHubリポジトリを検索し、結果をLiveDataに投稿する。
+     * 指定されたクエリでGitHubリポジトリを検索する。
+     * 結果はリポジトリの状態としてLiveDataに投稿される。
+     *
      * @param query 検索クエリ文字列。
      */
     fun searchRepositories(query: String) {
-        _repositoryState.value = RepositoryState.Loading // 検索開始時にローディング状態を設定
+        lastSuccessfulQuery = query
+        _repositoryState.value = RepositoryState.Loading  // ローディング状態を設定
         viewModelScope.launch {
-            val result = repository.searchRepositories(query) // リポジトリ検索の実行
-            _repositoryState.postValue(result) // 結果をLiveDataに投稿
+            try {
+                // リポジトリから検索結果を取得し、成功状態を投稿
+                val result = repository.searchRepositories(query)
+                _repositoryState.postValue(result)
+            } catch (e: Exception) {
+                // 例外が発生した場合はエラー状態を投稿
+                _repositoryState.postValue(RepositoryState.Error(e))
+            }
+        }
+    }
+
+    /**
+     * 最後に成功した検索を再試行する。
+     * lastSuccessfulQueryがnullでない場合に検索を実行する。
+     */
+    fun retryLastFetch() {
+        lastSuccessfulQuery?.let {
+            searchRepositories(it)
         }
     }
 }
