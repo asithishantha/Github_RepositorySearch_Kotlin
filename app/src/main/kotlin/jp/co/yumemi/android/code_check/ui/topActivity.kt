@@ -1,13 +1,17 @@
-package jp.co.yumemi.android.code_check
+package jp.co.yumemi.android.code_check.ui
 
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
+import jp.co.yumemi.android.code_check.R
 import java.util.*
 
 /**
  * アプリケーションのメインアクティビティです。
  * アプリケーションのエントリーポイントとして機能し、アプリケーション全体の機能を含みます。
  */
+@AndroidEntryPoint
 class TopActivity : AppCompatActivity(R.layout.activity_top) {
+
 
     companion object {
         private var lastSearchDateInternal: Date? = null
