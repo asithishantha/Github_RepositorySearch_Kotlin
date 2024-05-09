@@ -1,28 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!-- ナビゲーショングラフ定義ファイル。アプリ内の画面遷移を管理する。 -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/SearchRepositoriesFragment">
 
+    <!-- 検索画面のフラグメント定義。アプリのスタート地点として指定されている。 -->
     <fragment
         android:id="@+id/SearchRepositoriesFragment"
-        android:name="jp.co.yumemi.android.code_check.ui.SearchRepositoriesFragment"
+        android:name="jp.co.yumemi.android.code_check.ui.search.SearchRepositoriesFragment"
         android:label="@string/app_name"
         tools:layout="@layout/search_repositories_fragment">
+        <!-- 検索画面からリポジトリ詳細画面への遷移アクションを定義。 -->
         <action
             android:id="@+id/action_repositoriesFragment_to_repositoryFragment"
             app:destination="@id/RepositoryDetailFragment" />
     </fragment>
 
+    <!-- リポジトリ詳細画面のフラグメント定義。 -->
     <fragment
         android:id="@+id/RepositoryDetailFragment"
-        android:name="jp.co.yumemi.android.code_check.ui.RepositoryDetailFragment"
+        android:name="jp.co.yumemi.android.code_check.ui.detail.RepositoryDetailFragment"
         android:label="@string/app_name"
         tools:layout="@layout/repository_detail_fragment">
+        <!-- リポジトリ詳細画面に渡される引数の定義。RepositoryItem型のデータを受け取る。 -->
         <argument
             android:name="item"
             app:argType="jp.co.yumemi.android.code_check.model.RepositoryItem" />
     </fragment>
-
 </navigation>
