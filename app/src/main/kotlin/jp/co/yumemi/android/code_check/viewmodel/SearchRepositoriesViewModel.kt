@@ -21,6 +21,7 @@ class SearchRepositoriesViewModel @Inject constructor(
 
     // リポジトリの状態を保持するMutableLiveData
     private val _repositoryState = MutableLiveData<RepositoryState<List<RepositoryItem>>>()
+
     // リポジトリの状態を公開するためのLiveData
     val repositoryState: LiveData<RepositoryState<List<RepositoryItem>>> = _repositoryState
 

@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!-- ルートレイアウトは子ビューの柔軟な配置のためにConstraintLayoutを使用 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- オーナーアイコンを表示するためのImageView -->
     <ImageView
         android:id="@+id/ownerIconView"
         android:layout_width="0dp"
@@ -18,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_max="240dp" />
 
+    <!-- リポジトリ名を表示するためのTextView -->
     <TextView
         android:id="@+id/nameView"
         android:layout_width="wrap_content"
@@ -30,6 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ownerIconView" />
 
+    <!-- レイアウトを二等分するためのガイドライン -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/centerGuid"
         android:layout_width="wrap_content"
@@ -37,6 +40,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <!-- リポジトリのプログラミング言語を表示するためのTextView -->
     <TextView
         android:id="@+id/languageView"
         android:layout_width="0dp"
@@ -49,6 +53,7 @@
         app:layout_constraintTop_toBottomOf="@id/nameView"
         tools:ignore="MissingConstraints" />
 
+    <!-- スターの数を表示するためのTextView -->
     <TextView
         android:id="@+id/starsView"
         android:layout_width="0dp"
@@ -63,6 +68,7 @@
         app:layout_constraintStart_toStartOf="@id/centerGuid"
         app:layout_constraintTop_toBottomOf="@id/nameView" />
 
+    <!-- ウォッチャーの数を表示するためのTextView -->
     <TextView
         android:id="@+id/watchersView"
         android:layout_width="0dp"
@@ -77,6 +83,7 @@
         app:layout_constraintStart_toStartOf="@id/centerGuid"
         app:layout_constraintTop_toBottomOf="@id/starsView" />
 
+    <!-- フォークの数を表示するためのTextView -->
     <TextView
         android:id="@+id/forksView"
         android:layout_width="0dp"
@@ -91,6 +98,7 @@
         app:layout_constraintLeft_toLeftOf="@id/centerGuid"
         app:layout_constraintTop_toBottomOf="@id/watchersView" />
 
+    <!-- オープンイシューの数を表示するためのTextView -->
     <TextView
         android:id="@+id/openIssuesView"
         android:layout_width="0dp"

@@ -15,26 +15,33 @@ import jp.co.yumemi.android.code_check.databinding.RepositoryDetailFragmentBindi
  * リポジトリの詳細情報を表示し、検索した日時をログに出力します。
  */
 class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
-
+    // Navigationコンポーネントから渡された引数を受け取るためのプロパティ
     private val args: RepositoryDetailFragmentArgs by navArgs()
+
+    // View Bindingのためのプロパティ
     private var _binding: RepositoryDetailFragmentBinding? = null
     private val binding: RepositoryDetailFragmentBinding
-        get() = _binding ?: throw IllegalStateException("FragmentのビューバインデングがonCreateViewの前、またはonDestroyViewの後にアクセスされました。")
+        get() = _binding
+            ?: throw IllegalStateException("FragmentのビューバインデングがonCreateViewの前、またはonDestroyViewの後にアクセスされました。")
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    // FragmentのViewを生成する際に呼び出されるメソッド
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         _binding = RepositoryDetailFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     /**
-     * onViewCreatedは、Viewが生成された直後に呼び出されます。
-     * レイアウトのバインディングやリポジトリの詳細情報の表示を行います。
+     * Viewが生成された後に呼び出されるメソッドです。
+     * ここでレイアウトのバインディングを行い、リポジトリの詳細情報を画面に表示します。
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 引数からリポジトリの情報を取得
         val item = args.item
+        // 取得したリポジトリ情報をViewに設定
         with(binding) {
             ownerIconView.load(item.ownerIconUrl)
             nameView.text = item.name ?: "No name available"
@@ -46,13 +53,12 @@ class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
         }
     }
 
-
     /**
-     * onDestroyViewは、Viewが破棄される際に呼び出されます。
-     * バインディングの解除を行います。
+     * Viewが破棄される際に呼び出されるメソッドです。
+     * View Bindingのリソースを解放します。
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null  // Kotlinのsyntheticなどを使用している場合は、nullに設定します。View Bindingを使用している場合、通常は必要ありません。
+        _binding = null  // View Bindingを使用しているため、ここでバインディングをnullに設定してリソースを解放します
     }
 }

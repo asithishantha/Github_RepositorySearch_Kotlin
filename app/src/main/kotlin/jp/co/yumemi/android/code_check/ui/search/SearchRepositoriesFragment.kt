@@ -28,32 +28,40 @@ import jp.co.yumemi.android.code_check.ui.navigation.RepositoryNavigator
 import jp.co.yumemi.android.code_check.viewmodel.RepositoryState
 
 /**
- * SearchRepositoriesFragmentは、リポジトリの一覧を表示するFragmentです。
- * RecyclerViewを使用してリポジトリの一覧を表示し、検索機能を提供します。
+ * SearchRepositoriesFragmentは、GitHubリポジトリの検索結果を表示するFragmentです。
+ * ユーザーが検索クエリを入力し、結果をRecyclerViewで表示します。
  */
 @AndroidEntryPoint
 class SearchRepositoriesFragment : BaseFragment() {
+    // リポジトリの詳細画面へのナビゲーションを担当するクラスのインスタンス
     private lateinit var navigator: RepositoryNavigator
-    // ViewBindingのインスタンスを保持するプライベート変数です。Viewが破棄された際にはnullに設定されます。
-    private var _binding: SearchRepositoriesFragmentBinding? = null
-    //    安全にBindingインスタンスにアクセスするためのプロパティです。_bindingがnullの場合、IllegalStateExceptionを投げます。
-    //    これにより、Viewのライフサイクル外でのアクセスを防ぐことができます。
-    private val binding get() = _binding ?: throw IllegalStateException("BindingはonCreateViewとonDestroyViewの間でのみアクセス可能です")
 
-    // Move ViewModel declaration to a property of the fragment for broader scope
+    // View Bindingのインスタンスを保持するプライベート変数
+    private var _binding: SearchRepositoriesFragmentBinding? = null
+
+    // View Bindingインスタンスに安全にアクセスするためのプロパティ
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("BindingはonCreateViewとonDestroyViewの間でのみアクセス可能です")
+
+    // ViewModelのインスタンスを保持するプロパティ
     private val viewModel: SearchRepositoriesViewModel by viewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    // FragmentのViewを生成する際に呼び出されるメソッド
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = SearchRepositoriesFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    // リポジトリアイテムがクリックされた時の処理を定義するメソッド
     private fun onItemClicked(item: RepositoryItem) {
         navigator.navigateToDetail(item)
     }
 
 
-
+    // Viewが生成された後に呼び出されるメソッド
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navigator = RepositoryNavigator(findNavController())
@@ -62,6 +70,7 @@ class SearchRepositoriesFragment : BaseFragment() {
         setupSearchListeners()
     }
 
+    // RecyclerViewのセットアップを行うメソッド
     private fun setupRecyclerView() {
         val adapter = CustomAdapter().apply {
             itemClickListener = { item ->
@@ -74,17 +83,19 @@ class SearchRepositoriesFragment : BaseFragment() {
         }
     }
 
+    // ViewModelの状態を監視し、UIを更新するメソッド
     private fun observeViewModel() {
         viewModel.repositoryState.observe(viewLifecycleOwner) { state ->
             updateUIState(state)
         }
     }
 
+    // 検索成功時のUI表示を更新するメソッド
     private fun setupSearchListeners() {
         binding.searchInputText.setOnEditorActionListener { editText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 editText.text?.toString()?.let { query ->
-                    Log.d("SearchRepositoriesFragment", "Search query: $query")
+                    Log.d("SearchRepositoriesFragment", "検索クエリ: $query") // 検索クエリをデバッグログに出力
                     viewModel.searchRepositories(query)
                 }
                 true
@@ -97,14 +108,16 @@ class SearchRepositoriesFragment : BaseFragment() {
                 try {
                     viewModel.searchRepositories(query)
                 } catch (e: Exception) {
-                    showMessage("Search failed: ${e.localizedMessage}", isError = true)
+                    showMessage("検索に失敗しました: ${e.localizedMessage}", isError = true)
                 }
             } else {
-                showMessage("Please enter a search query", isError = false)
+                showMessage("検索クエリを入力してください", isError = false)
             }
         }
 
     }
+
+    // 検索成功時のUI表示を更新するメソッド
     private fun showSuccess(items: List<RepositoryItem>) {
         showLoading(false) // Turn off loading indicator
         if (items.isEmpty()) {
@@ -113,12 +126,13 @@ class SearchRepositoriesFragment : BaseFragment() {
             binding.recyclerView.visibility = View.VISIBLE
             (binding.recyclerView.adapter as CustomAdapter).submitList(items)
             showEmptyState(false)
-            binding.retryButton.visibility = View.GONE // Ensure the retry button is hidden on success
+            binding.retryButton.visibility =
+                View.GONE // Ensure the retry button is hidden on success
         }
     }
 
 
-    // Consolidate the visibility toggles for UI elements
+    // UI要素の表示を切り替えるメソッド
     override fun showLoading(show: Boolean) {
         super.showLoading(show)
         binding.recyclerView.visibility = if (show) View.GONE else View.VISIBLE
@@ -126,6 +140,7 @@ class SearchRepositoriesFragment : BaseFragment() {
         binding.retryButton.visibility = if (show) View.GONE else View.VISIBLE
     }
 
+    // エラー表示を行うメソッド
     override fun showError(message: String) {
         super.showError(message)
         if (binding.recyclerView.visibility == View.GONE) {
@@ -134,6 +149,7 @@ class SearchRepositoriesFragment : BaseFragment() {
         }
     }
 
+    // 空の状態を表示するメソッド
     override fun showEmptyState(show: Boolean) {
         super.showEmptyState(show)
         binding.recyclerView.visibility = if (show) View.GONE else View.VISIBLE
@@ -142,24 +158,26 @@ class SearchRepositoriesFragment : BaseFragment() {
     }
 
 
-
+    // ViewModelの状態に応じてUIを更新するメソッド
     private fun updateUIState(state: RepositoryState<List<RepositoryItem>>) {
         when (state) {
             is RepositoryState.Loading -> showLoading(true)
             is RepositoryState.Success -> showSuccess(state.data)
-            is RepositoryState.Error -> showError(state.exception.localizedMessage ?: "An unknown error occurred")
+            is RepositoryState.Error -> showError(
+                state.exception.localizedMessage ?: "An unknown error occurred"
+            )
+
             is RepositoryState.Empty -> showEmptyState(true)
         }
     }
 
-
-
-
+    // メッセージを表示するメソッド
     private fun showMessage(message: String, isError: Boolean) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
         binding.retryButton.visibility = if (isError) View.VISIBLE else View.GONE
     }
 
+    // Viewが破棄される際に呼び出されるメソッド
     override fun onDestroyView() {
         super.onDestroyView()
         // Clean up any observers to prevent memory leaks

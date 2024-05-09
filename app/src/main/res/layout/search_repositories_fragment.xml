@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!-- ConstraintLayoutを使用したルートレイアウト -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.TopActivity">
 
+    <!-- 検索バーとして使用するMaterialCardView -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/searchBar"
         android:layout_width="0dp"
@@ -18,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- ユーザーが検索を入力できるTextInputLayout -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchInputLayout"
             style="@style/TextInputLayoutNoBorder"
@@ -34,6 +36,7 @@
             app:startIconDrawable="@android:drawable/ic_menu_search"
             app:startIconTint="@android:color/darker_gray">
 
+            <!-- ユーザーがテキストを入力するTextInputEditText -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/searchInputText"
                 android:layout_width="match_parent"
@@ -49,16 +52,17 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <!-- 検索ボタンの追加 -->
+    <!-- 検索を実行するボタン -->
     <Button
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/search_button_text"
         app:layout_constraintEnd_toEndOf="@id/searchBar"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
+    <!-- 検索結果を表示するRecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -70,40 +74,41 @@
         app:layout_constraintTop_toBottomOf="@id/searchButton"
         app:layout_constraintVertical_bias="0.0" />
 
-
+    <!-- アイテムが見つからない場合に表示するTextView -->
     <TextView
         android:id="@+id/emptyStateTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No items found"
         android:gravity="center"
+        android:text="No items found"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- 再試行ボタン -->
     <Button
         android:id="@+id/retryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/retry_button_text"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/emptyStateTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/emptyStateTextView" />
 
-
+    <!-- プログレスバー -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"/>
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
