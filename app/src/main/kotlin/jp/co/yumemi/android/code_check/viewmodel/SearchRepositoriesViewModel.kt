@@ -9,11 +9,13 @@ import jp.co.yumemi.android.code_check.model.RepositoryItem
 import jp.co.yumemi.android.code_check.repository.GithubRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import jp.co.yumemi.android.code_check.OpenForTesting
 
 /**
  * GitHubリポジトリの検索結果を管理するViewModel。
  * リポジトリの状態をLiveDataで公開し、UI層での監視を可能にする。
  */
+@OpenForTesting
 @HiltViewModel
 class SearchRepositoriesViewModel @Inject constructor(
     private val repository: GithubRepository  // GitHubリポジトリにアクセスするためのリポジトリクラス

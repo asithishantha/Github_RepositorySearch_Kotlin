@@ -134,6 +134,7 @@ class SearchRepositoriesFragment : BaseFragment() {
     override fun showLoading(show: Boolean) {
         super.showLoading(show)
         binding.recyclerView.visibility = if (show) View.GONE else View.VISIBLE
+        binding.emptyStateTextView.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     // エラー表示を行うメソッド
