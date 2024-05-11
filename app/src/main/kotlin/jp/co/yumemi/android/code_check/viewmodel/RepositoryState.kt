@@ -33,4 +33,6 @@ sealed class RepositoryState<out T> {
      * データが見つからなかったことを示す。
      */
     object Empty : RepositoryState<Nothing>()  // データが見つからないことを表す
+
+    object JsonParsingError : RepositoryState<Nothing>()
 }

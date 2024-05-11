@@ -15,16 +15,17 @@ import jp.co.yumemi.android.code_check.databinding.RepositoryDetailFragmentBindi
  * リポジトリの詳細情報を表示し、検索した日時をログに出力します。
  */
 class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
-    // Navigationコンポーネントから渡された引数を受け取るためのプロパティ
+    // Navigationコンポーネントから渡された引数を受け取るためのプロパティです。
     private val args: RepositoryDetailFragmentArgs by navArgs()
 
-    // View Bindingのためのプロパティ
+    // View Bindingのためのプロパティです。
     private var _binding: RepositoryDetailFragmentBinding? = null
     private val binding: RepositoryDetailFragmentBinding
-        get() = _binding
-            ?: throw IllegalStateException("FragmentのビューバインデングがonCreateViewの前、またはonDestroyViewの後にアクセスされました。")
+        get() = _binding ?: throw IllegalStateException(
+            "FragmentのビューバインディングがonCreateViewの前、またはonDestroyViewの後にアクセスされました。"
+        )
 
-    // FragmentのViewを生成する際に呼び出されるメソッド
+    // FragmentのViewを生成する際に呼び出されるメソッドです。
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -39,17 +40,34 @@ class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 引数からリポジトリの情報を取得
+        // 引数からリポジトリの情報を取得します。
         val item = args.item
-        // 取得したリポジトリ情報をViewに設定
+        // 取得したリポジトリ情報をViewに設定します。
         with(binding) {
-            ownerIconView.load(item.ownerIconUrl)
-            nameView.text = item.name ?: "No name available"
-            languageView.text = item.language ?: "Language unknown"
-            starsView.text = "${item.stargazersCount} stars"
-            watchersView.text = "${item.watchersCount} watchers"
-            forksView.text = "${item.forksCount} forks"
-            openIssuesView.text = "${item.openIssuesCount} open issues"
+            // オーナーのアイコンURLがnullまたは空の場合、デフォルトの画像を設定します。
+            if (item.ownerIconUrl.isNullOrEmpty()) {
+                ownerIconView.setImageResource(R.drawable.jetbrains)
+            } else {
+                ownerIconView.load(item.ownerIconUrl)
+            }
+            // リポジトリ名がnullまたは空の場合、デフォルトのテキストを表示します。
+            nameView.text = item.name.ifNullOrEmpty { getString(R.string.no_name_available) }
+            // 使用言語がnullまたは空の場合、デフォルトのテキストを表示します。
+            languageView.text = item.language.ifNullOrEmpty { getString(R.string.language_unknown) }
+            // スター数、ウォッチャー数、フォーク数、オープンイシュー数を表示します。
+            // 数量に応じた複数形のテキストを取得し、フォーマット引数として使用します。
+            starsView.text = resources.getQuantityString(
+                R.plurals.stars_count, item.stargazersCount.toInt(), item.stargazersCount.toInt()
+            )
+            watchersView.text = resources.getQuantityString(
+                R.plurals.watchers_count, item.watchersCount.toInt(), item.watchersCount.toInt()
+            )
+            forksView.text = resources.getQuantityString(
+                R.plurals.forks_count, item.forksCount.toInt(), item.forksCount.toInt()
+            )
+            openIssuesView.text = resources.getQuantityString(
+                R.plurals.open_issues_count, item.openIssuesCount.toInt(), item.openIssuesCount.toInt()
+            )
         }
     }
 
@@ -59,6 +77,13 @@ class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null  // View Bindingを使用しているため、ここでバインディングをnullに設定してリソースを解放します
+        _binding = null  // View Bindingを使用しているため、ここでバインディングをnullに設定してリソースを解放します。
     }
+}
+
+/**
+ * nullまたは空の文字列の場合にデフォルト値を返す拡張関数です。
+ */
+private fun String?.ifNullOrEmpty(defaultValue: () -> String): String {
+    return if (this.isNullOrEmpty()) defaultValue() else this
 }

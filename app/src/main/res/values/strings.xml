@@ -4,4 +4,18 @@
     <string name="written_language">Written in %s</string>
     <string name="search_button_text">Search</string>
     <string name="retry_button_text">Retry</string>
+    <string name="repo_owner">JetBrains/kotlin</string>
+    <string name="repo_language">Written in Kotlin</string>
+    <string name="repo_stars">38530 stars</string>
+    <string name="repo_watchers">38530 watchers</string>
+    <string name="repo_forks">4675 forks</string>
+    <string name="repo_open_issues">131 open issues</string>
+    <string name="no_items_found">No items found</string>
+    <string name="stars_count">%d stars</string>
+    <string name="watchers_count">%d watchers</string>
+    <string name="forks_count">%d forks</string>
+    <string name="open_issues_count">%d open issues</string>
+    <string name="no_name_available">No name available</string>
+    <string name="language_unknown">Language unknown</string>
+
 </resources>
