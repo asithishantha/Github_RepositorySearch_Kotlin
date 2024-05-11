@@ -35,13 +35,26 @@ class SearchRepositoriesViewModel @Inject constructor(
      * @param query 検索クエリ文字列。
      */
     fun searchRepositories(query: String) {
+        // Check if the query is empty and return early if it is
+        if (query.isEmpty()) {
+            // Update the state to reflect that no search was performed due to empty query
+            _repositoryState.value = RepositoryState.Empty
+            return
+        }
+        // If the query is not empty, proceed with the search
         lastSuccessfulQuery = query
         _repositoryState.value = RepositoryState.Loading  // ローディング状態を設定
         viewModelScope.launch {
+
             try {
                 // リポジトリから検索結果を取得し、成功状態を投稿
                 val result = repository.searchRepositories(query)
-                _repositoryState.postValue(result)
+                if (result == null) {
+                    // Handle null result as an error state
+                    _repositoryState.postValue(RepositoryState.Error(Exception("Null response received")))
+                } else {
+                    _repositoryState.postValue(result)
+                }
             } catch (e: Exception) {
                 // 例外が発生した場合はエラー状態を投稿
                 _repositoryState.postValue(RepositoryState.Error(e))

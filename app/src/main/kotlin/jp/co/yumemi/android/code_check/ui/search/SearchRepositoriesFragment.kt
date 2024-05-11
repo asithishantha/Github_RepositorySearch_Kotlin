@@ -126,8 +126,6 @@ class SearchRepositoriesFragment : BaseFragment() {
             binding.recyclerView.visibility = View.VISIBLE
             (binding.recyclerView.adapter as CustomAdapter).submitList(items)
             showEmptyState(false)
-            binding.retryButton.visibility =
-                View.GONE // Ensure the retry button is hidden on success
         }
     }
 
@@ -136,25 +134,18 @@ class SearchRepositoriesFragment : BaseFragment() {
     override fun showLoading(show: Boolean) {
         super.showLoading(show)
         binding.recyclerView.visibility = if (show) View.GONE else View.VISIBLE
-        binding.emptyStateTextView.visibility = if (show) View.GONE else View.VISIBLE
-        binding.retryButton.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     // エラー表示を行うメソッド
     override fun showError(message: String) {
         super.showError(message)
-        if (binding.recyclerView.visibility == View.GONE) {
-            // Only show the retry button if the RecyclerView is hidden (no search results)
-            binding.retryButton.visibility = View.VISIBLE
-        }
+        binding.recyclerView.visibility == View.GONE
     }
 
     // 空の状態を表示するメソッド
     override fun showEmptyState(show: Boolean) {
         super.showEmptyState(show)
         binding.recyclerView.visibility = if (show) View.GONE else View.VISIBLE
-        // Hide the retry button when showing the empty state
-        binding.retryButton.visibility = if (show) View.GONE else View.VISIBLE
     }
 
 
@@ -168,13 +159,13 @@ class SearchRepositoriesFragment : BaseFragment() {
             )
 
             is RepositoryState.Empty -> showEmptyState(true)
+            else -> Log.e("SearchRepositoriesFragment", "Unhandled state: $state")
         }
     }
 
     // メッセージを表示するメソッド
     private fun showMessage(message: String, isError: Boolean) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
-        binding.retryButton.visibility = if (isError) View.VISIBLE else View.GONE
     }
 
     // Viewが破棄される際に呼び出されるメソッド
