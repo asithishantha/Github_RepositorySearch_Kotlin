@@ -1,0 +1,45 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="80dp"
+    android:background="@drawable/rounded_rectangle"
+    android:padding="15dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/repositoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Repository Name"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal"
+            android:layout_marginTop="1dp">
+
+            <ImageView
+                android:id="@+id/starIconImageView"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/star96"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="-2dp"/>
+
+            <TextView
+                android:id="@+id/starCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stars"
+                android:textColor="#757575"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.co.yumemi.android.code_check.databinding.LayoutItemBinding
 import jp.co.yumemi.android.code_check.model.RepositoryItem
 import jp.co.yumemi.android.code_check.util.diffUtil
+import com.bumptech.glide.Glide
 
 /**
  * RecyclerViewのデータを表示するためのアダプタークラス。
@@ -66,6 +67,11 @@ class CustomAdapter : ListAdapter<RepositoryItem, CustomAdapter.ItemViewHolder>(
          */
         fun bind(item: RepositoryItem) {
             binding.repositoryNameView.text = item.name
+            binding.starCountTextView.text = item.stargazersCount.toString()
+
+            Glide.with(binding.ownerIconImageView.context)
+                .load(item.ownerIconUrl)
+                .into(binding.ownerIconImageView)
             // アイテムビューがクリックされたときにitemClickListenerを呼び出す
             itemView.setOnClickListener {
                 itemClickListener?.invoke(item)

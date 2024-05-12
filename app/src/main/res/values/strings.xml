@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Android Engineer CodeCheck</string>
-    <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
+    <string name="app_name">Repokun</string>
+    <string name="searchInputText_hint">GitHub のリポジトリ名を入力してください。</string>
     <string name="written_language">Written in %s</string>
     <string name="search_button_text">Search</string>
     <string name="retry_button_text">Retry</string>
@@ -10,12 +10,42 @@
     <string name="repo_watchers">38530 watchers</string>
     <string name="repo_forks">4675 forks</string>
     <string name="repo_open_issues">131 open issues</string>
-    <string name="no_items_found">No items found</string>
     <string name="stars_count">%d stars</string>
     <string name="watchers_count">%d watchers</string>
     <string name="forks_count">%d forks</string>
     <string name="open_issues_count">%d open issues</string>
     <string name="no_name_available">No name available</string>
     <string name="language_unknown">Language unknown</string>
-
+    <string name="left_arrow_description">Previous background</string>
+    <string name="right_arrow_description">Next background</string>
+    <string name="description_imageViewSplash">Description of the image</string>
+    <string name="search_icon_description">Search</string>
+    <string name="error_title">エラー</string>
+    <string name="error_message">問題が発生しました。\nもう一度お試しください。</string>
+    <string name="no_items_found_title">項目が見つかりませんでした</string>
+    <string name="no_items_found_message">\n有効な検索条件を入力してください。</string>
+    <string name="invalid_input_title">無効な入力</string>
+    <string name="invalid_input_message">「#」から始まる入力は許可されていません。</string>
+    <string name="enter_search_query">検索クエリを入力してください</string>
+    <string name="close_button_description">Close</string>
+    <style name="HintTextAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <string name="copy_url">Copy URL</string>
+    <string name="share">Share</string>
+    <string name="back_button_description">back_button_description</string>
+    <string name="open_in_browser">open_in_browser</string>
+    <string name="repository_name">Repository Name</string>
+    <string name="programming_language">Programming Language</string>
+    <string name="programminglanguagename">Ruby</string>
+    <string name="Stars">Stars</string>
+    <string name="starcount">1024</string>
+    <string name="Watchers">Watchers</string>
+    <string name="Watcherscount">58</string>
+    <string name="Forks">Forks</string>
+    <string name="Forkscount">200</string>
+    <string name="Open_Issues">Open Issues</string>
+    <string name="OpenIssuescount">42</string>
+    <string name="descriptive_text">descriptive_text</string>
+    <string name="Loading">Loading...</string>
 </resources>

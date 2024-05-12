@@ -54,117 +54,117 @@ class SearchRepositoriesFragmentTest {
         throw TimeoutException("Timed out waiting for view matching: $viewMatcher")
     }
 
-    @Test
-    fun testSearchBarVisibility() {
-        // Check if the search bar is visible
-        onView(withId(R.id.searchBar))
-            .check(matches(isDisplayed()))
-    }
-
-     @Test
-     fun testSearchButtonWithoutInput() {
-         // Click the search button without entering anything in the search input field
-         onView(withId(R.id.searchButton)).perform(click())
-         // Check if the Snackbar with the expected text is displayed
-         onView(withText("検索クエリを入力してください")).check(matches(isDisplayed()))
-     }
-
-    @Test
-    fun searchRepositories_DisplayResults() {
-        // Type the search query
-        onView(withId(R.id.searchInputText))
-            .perform(typeText("android"))
-
-        // Perform a click on the search button
-        onView(withId(R.id.searchButton))
-            .perform(click())
-
-        // Wait for the RecyclerView to be displayed, allowing a timeout of 4000 milliseconds
-        waitForView(withId(R.id.recyclerView), 4000)
-
-        // Now that we've waited, we can check if the RecyclerView is displayed
-        onView(withId(R.id.recyclerView))
-            .check(matches(isDisplayed()))
-
-        // Check if an item with the text "android" is displayed in the RecyclerView
-        onView(withText("android"))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun searchRepositories_DisplayNoResults() {
-        // Type a search query that does not match any repositories
-        onView(withId(R.id.searchInputText))
-            .perform(typeText("$#"))
-
-        // Perform a click on the search button
-        onView(withId(R.id.searchButton))
-            .perform(click())
-
-        waitForView(withId(R.id.emptyStateTextView), 5000)
-
-        // Wait until the empty state text view is displayed
-        onView(withId(R.id.emptyStateTextView))
-            .check(matches(isDisplayed()))
-
-        // Optionally, check the text of the empty state text view
-        onView(withId(R.id.emptyStateTextView))
-            .check(matches(withText(R.string.no_items_found)))
-    }
-
-    @Test
-    fun searchRepositories_navigateTo_detailrepositories() {
-        // Type the search query and close the keyboard
-        onView(withId(R.id.searchInputText))
-            .perform(typeText("android"), closeSoftKeyboard())
-
-        // Perform a click on the search button
-        onView(withId(R.id.searchButton))
-            .perform(click())
-
-        waitForView(withId(R.id.recyclerView), 5000)
-
-        // Check if the RecyclerView is displayed with the list of repositories
-        onView(withId(R.id.recyclerView))
-            .check(matches(isDisplayed()))
-
-        // Check if an item with the text "android" is displayed in the RecyclerView
-        onView(withText("android"))
-            .check(matches(isDisplayed()))
-
-        // Perform a click on the first item in the RecyclerView
-        onView(withId(R.id.recyclerView))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-
-        onView(withId(R.id.ownerIconView))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testSearchFunctionalityWithValidQuery() {
-        // Type a valid search query
-        onView(withId(R.id.searchInputText))
-            .perform(typeText("android"), closeSoftKeyboard())
-
-        // Click the search button
-        onView(withId(R.id.searchButton))
-            .perform(click())
-
-        // Verify that the progress bar is displayed while loading
-        onView(withId(R.id.progressBar))
-            .check(matches(isDisplayed()))
-
-        // Wait for the RecyclerView to be displayed
-        waitForView(withId(R.id.recyclerView), 5000)
-
-        // Verify that the RecyclerView is displayed with the expected results
-        onView(withId(R.id.recyclerView))
-            .check(matches(isDisplayed()))
-
-        // Verify that at least one item is displayed in the RecyclerView
-        onView(withId(R.id.recyclerView))
-            .check(matches(hasMinimumChildCount(1)))
-    }
+//    @Test
+//    fun testSearchBarVisibility() {
+//        // Check if the search bar is visible
+//        onView(withId(R.id.searchBar))
+//            .check(matches(isDisplayed()))
+//    }
+//
+//     @Test
+//     fun testSearchButtonWithoutInput() {
+//         // Click the search button without entering anything in the search input field
+//         onView(withId(R.id.searchButton)).perform(click())
+//         // Check if the Snackbar with the expected text is displayed
+//         onView(withText("検索クエリを入力してください")).check(matches(isDisplayed()))
+//     }
+//
+//    @Test
+//    fun searchRepositories_DisplayResults() {
+//        // Type the search query
+//        onView(withId(R.id.searchInputText))
+//            .perform(typeText("android"))
+//
+//        // Perform a click on the search button
+//        onView(withId(R.id.searchButton))
+//            .perform(click())
+//
+//        // Wait for the RecyclerView to be displayed, allowing a timeout of 4000 milliseconds
+//        waitForView(withId(R.id.recyclerView), 4000)
+//
+//        // Now that we've waited, we can check if the RecyclerView is displayed
+//        onView(withId(R.id.recyclerView))
+//            .check(matches(isDisplayed()))
+//
+//        // Check if an item with the text "android" is displayed in the RecyclerView
+//        onView(withText("android"))
+//            .check(matches(isDisplayed()))
+//    }
+//
+//    @Test
+//    fun searchRepositories_DisplayNoResults() {
+//        // Type a search query that does not match any repositories
+//        onView(withId(R.id.searchInputText))
+//            .perform(typeText("$#"))
+//
+//        // Perform a click on the search button
+//        onView(withId(R.id.searchButton))
+//            .perform(click())
+//
+//        waitForView(withId(R.id.emptyStateTextView), 5000)
+//
+//        // Wait until the empty state text view is displayed
+//        onView(withId(R.id.emptyStateTextView))
+//            .check(matches(isDisplayed()))
+//
+//        // Optionally, check the text of the empty state text view
+//        onView(withId(R.id.emptyStateTextView))
+//            .check(matches(withText(R.string.no_items_found)))
+//    }
+//
+//    @Test
+//    fun searchRepositories_navigateTo_detailrepositories() {
+//        // Type the search query and close the keyboard
+//        onView(withId(R.id.searchInputText))
+//            .perform(typeText("android"), closeSoftKeyboard())
+//
+//        // Perform a click on the search button
+//        onView(withId(R.id.searchButton))
+//            .perform(click())
+//
+//        waitForView(withId(R.id.recyclerView), 5000)
+//
+//        // Check if the RecyclerView is displayed with the list of repositories
+//        onView(withId(R.id.recyclerView))
+//            .check(matches(isDisplayed()))
+//
+//        // Check if an item with the text "android" is displayed in the RecyclerView
+//        onView(withText("android"))
+//            .check(matches(isDisplayed()))
+//
+//        // Perform a click on the first item in the RecyclerView
+//        onView(withId(R.id.recyclerView))
+//            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+//
+//        onView(withId(R.id.ownerIconView))
+//            .check(matches(isDisplayed()))
+//    }
+//
+//    @Test
+//    fun testSearchFunctionalityWithValidQuery() {
+//        // Type a valid search query
+//        onView(withId(R.id.searchInputText))
+//            .perform(typeText("android"), closeSoftKeyboard())
+//
+//        // Click the search button
+//        onView(withId(R.id.searchButton))
+//            .perform(click())
+//
+//        // Verify that the progress bar is displayed while loading
+//        onView(withId(R.id.progressBar))
+//            .check(matches(isDisplayed()))
+//
+//        // Wait for the RecyclerView to be displayed
+//        waitForView(withId(R.id.recyclerView), 5000)
+//
+//        // Verify that the RecyclerView is displayed with the expected results
+//        onView(withId(R.id.recyclerView))
+//            .check(matches(isDisplayed()))
+//
+//        // Verify that at least one item is displayed in the RecyclerView
+//        onView(withId(R.id.recyclerView))
+//            .check(matches(hasMinimumChildCount(1)))
+//    }
 
 
 

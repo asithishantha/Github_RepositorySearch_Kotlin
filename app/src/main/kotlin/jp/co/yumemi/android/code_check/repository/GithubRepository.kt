@@ -72,4 +72,10 @@ class GithubRepository @Inject constructor(private val client: HttpClient) {
             RepositoryState.Error(e)  // その他の例外に対するキャッチオール
         }
     }
+
+    suspend fun getRepositoriesByOwner(owner: String): RepositoryState<List<RepositoryItem>> = withContext(Dispatchers.IO) {
+        // Use the searchRepositories method with the user's name as the query
+        return@withContext searchRepositories("user:$owner")
+    }
+
 }

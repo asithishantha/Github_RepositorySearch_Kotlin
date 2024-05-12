@@ -6,16 +6,10 @@ import jp.co.yumemi.android.code_check.ui.adapters.CustomAdapter
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import android.os.Build
-import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P])

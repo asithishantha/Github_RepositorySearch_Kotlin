@@ -51,12 +51,8 @@ class SearchRepositoriesViewModel @Inject constructor(
             try {
                 // リポジトリから検索結果を取得し、成功状態を投稿
                 val result = repository.searchRepositories(query)
-                if (result == null) {
-                    // Handle null result as an error state
-                    _repositoryState.postValue(RepositoryState.Error(Exception("Null response received")))
-                } else {
-                    _repositoryState.postValue(result)
-                }
+
+                _repositoryState.postValue(result)
             } catch (e: Exception) {
                 // 例外が発生した場合はエラー状態を投稿
                 _repositoryState.postValue(RepositoryState.Error(e))
