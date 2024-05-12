@@ -1,59 +1,57 @@
 # 株式会社ゆめみ Android エンジニアコードチェック課題
+# REPOくん - レポーシトリを検索できるアプリ
+<img src="docs/repo.png" width="150" height="150">
 
-## 概要
+REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧できるAndroidアプリです。直感的なUIと豊富な機能で、ユーザーが求めるリポジトリを簡単に見つけることができます。
 
-本プロジェクトは株式会社ゆめみ（以下弊社）が、弊社に Android エンジニアを希望する方に出す課題のベースプロジェクトです。本課題が与えられた方は、下記の概要を詳しく読んだ上で課題を取り組んでください。
-
-## アプリ仕様
+## アプリの操作流れは下記の通りです。
 
 本アプリは GitHub のリポジトリを検索するアプリです。
+ 1.Splash画面<span style="margin-right: 3cm;">&nbsp;</span>2. Search画面<span style="margin-right: 3cm;">&nbsp;</span>3. ローデイング画面<br>
+   <img src="docs/splash.gif" width="150" style="margin-right: 3cm;"><img src="docs/search.gif" width="150" style="margin-right: 3cm;"><img src="docs/loading.gif" width="150"><br>
 
-<img src="docs/app.gif" width="320">
+ 4.Background変更<span style="margin-right: 3cm;">&nbsp;</span>5. 検索結果画面<span style="margin-right: 3cm;">&nbsp;</span>6. 検索結果が0件の場合の画面<br>
+   <img src="docs/screen-change.gif" width="150" style="margin-right: 3cm;"><img src="docs/search-results.gif" width="150" style="margin-right: 3cm;"><img src="docs/valid-search.gif" width="150"><br>
 
-### 環境
+ 7.#コード許可なしエラーメッセージ<span style="margin-right: 3cm;">&nbsp;</span>8. 検索結果詳細画面<span style="margin-right: 3cm;">&nbsp;</span>9. ユーザーの他のリポジトリ情報表示<br>
+   <img src="docs/nohash.gif" width="150" style="margin-right: 3cm;"><img src="docs/navto detail.gif" width="150" style="margin-right: 3cm;"><img src="docs/other-repo-fromm-user.gif" width="150"><br>
 
-- IDE：Android Studio Flamingo | 2022.2.1 Patch 2
+ 8.URLをクリップボードにコピーする機能<span style="margin-right: 3cm;">&nbsp;</span>11. URLを他のアプリで共有する機能<span style="margin-right: 3cm;">&nbsp;</span>12. リポジトリをブラウザで直接開く機能<br>
+    <img src="docs/copy-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/share-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/open-in-web.gif" width="150"><br>
+
+
+
+### 環境は下記の通りです
+
+- IDE：Android Studio Iguana | 2023.2.1 Patch 2
 - Kotlin：1.6.21
-- Java：17
-- Gradle：8.0
+- Java：17.0.11
+- Gradle：8.4
 - minSdk：23
-- targetSdk：31
+- targetSdk：33
 
-※ ライブラリの利用はオープンソースのものに限ります。
-※ 環境は適宜更新してください。
+### 最近のアップデート
 
-### 動作
+アプリは以下のPull Requestを通じて、様々な改善と新機能が追加されました。
 
-1. 何かしらのキーワードを入力
-2. GitHub API（`search/repositories`）でリポジトリを検索し、結果一覧を概要（リポジトリ名）で表示
-3. 特定の結果を選択したら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示
+- [ソースコードの可読性の向上 #1](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/10)
+- [安全性向上のためのコード改善 #2](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/11)
+- [バグを修正 #3](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/13)
+- [Fat Fragmentの解消とMVVMアーキテクチャへの全面移行 #4](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/14)
+- [プログラム構造をリファクタリング #5](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/16)
+- [テストを追加 #7](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/18)
+- [UIをブラッシュアップし新機能を追加 #8](https://github.com/asithishantha/android-engineer-codecheck-asith/pull/19)
 
-## 課題取り組み方法
+これらの変更により、アプリの安定性、ユーザーエクスペリエンス、および開発者の作業効率が向上しました。特に、MVVMアーキテクチャへの移行により、コードの保守性とテスト容易性が大幅に改善されています。
 
-Issues を確認した上、本プロジェクトを [**Duplicate** してください](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository)（Fork しないようにしてください。必要ならプライベートリポジトリにしても大丈夫です）。今後のコミットは全てご自身のリポジトリで行ってください。
+### 今後の予定
 
-コードチェックの課題 Issue は全て [`課題`](https://github.com/yumemi-inc/android-engineer-codecheck/milestone/1) Milestone がついており、難易度に応じて Label が [`初級`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A初級+milestone%3A課題)、[`中級`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A中級+milestone%3A課題+) と [`ボーナス`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3Aボーナス+milestone%3A課題+) に分けられています。課題の必須／選択は下記の表とします。
+ステップ2では、以下の改善を行う予定です。
 
-|   | 初級 | 中級 | ボーナス
-|--:|:--:|:--:|:--:|
-| 新卒／未経験者 | 必須 | 選択 | 選択 |
-| 中途／経験者 | 必須 | 必須 | 選択 |
+- 単体テストとUIテストの更新
+- Roomデータベースの導入
+- ログイン機能とユーザー登録機能の追加
 
-課題 Issueをご自身のリポジトリーにコピーするGitHub Actionsをご用意しております。  
-[こちらのWorkflow](./.github/workflows/copy-issues.yml)を[手動でトリガーする](https://docs.github.com/ja/actions/managing-workflow-runs/manually-running-a-workflow)ことでコピーできますのでご活用下さい。
+これらの機能は、アプリの使い勝手をさらに向上させ、ユーザーにとってより魅力的なものにするためのものです。
 
-課題が完成したら、リポジトリのアドレスを教えてください。
-
-## 参考記事
-
-提出された課題の評価ポイントに関しては、[こちらの記事](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)に詳しく書かれてありますので、ぜひご覧ください。
-
-## AIサービスの利用について
-
-ChatGPTなどAIサービスの利用は禁止しておりません。
-
-利用にあたって工夫したプロンプトやソースコメント等をご提出頂くことで、加点評価する場合もございます。 (減点評価はありません)
-
-また、弊社コードチェック担当者もAIサービスを利用させていただく場合があります。
-
-AIサービスの利用は差し控えてもらいたいなどのご要望がある場合は、お気軽にお申し出ください。
+---
