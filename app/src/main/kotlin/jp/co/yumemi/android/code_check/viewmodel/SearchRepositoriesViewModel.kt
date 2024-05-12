@@ -10,6 +10,8 @@ import jp.co.yumemi.android.code_check.repository.GithubRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import jp.co.yumemi.android.code_check.OpenForTesting
+import org.json.JSONException
+import java.io.IOException
 
 /**
  * GitHubリポジトリの検索結果を管理するViewModel。
@@ -47,14 +49,25 @@ class SearchRepositoriesViewModel @Inject constructor(
         lastSuccessfulQuery = query
         _repositoryState.value = RepositoryState.Loading  // ローディング状態を設定
         viewModelScope.launch {
+            // 検索が開始され、ローディング中であることをオブザーバーに通知します
+            _repositoryState.postValue(RepositoryState.Loading)
 
             try {
-                // リポジトリから検索結果を取得し、成功状態を投稿
+                // 指定されたクエリでリポジトリを検索を試みます
                 val result = repository.searchRepositories(query)
-
+                // 成功した場合、結果をLiveDataに投稿します
                 _repositoryState.postValue(result)
+            } catch (e: IOException) {
+                // IOExceptionが発生した場合、例外を含むエラー状態を投稿します
+                // これは通常、ネットワークエラーや類似の接続問題を示します
+                _repositoryState.postValue(RepositoryState.Error(e))
+            } catch (e: JSONException) {
+                // JSONExceptionが発生した場合、JsonParsingError状態を投稿します
+                // これはJSONレスポンスの解析中にエラーが発生したことを示します
+                _repositoryState.postValue(RepositoryState.JsonParsingError)
             } catch (e: Exception) {
-                // 例外が発生した場合はエラー状態を投稿
+                // その他の種類のExceptionが発生した場合、例外を含むエラー状態を投稿します
+                // これはその他の予期せぬエラーに対するキャッチオールです
                 _repositoryState.postValue(RepositoryState.Error(e))
             }
         }
