@@ -1,21 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:layout_width="300dp"
+    android:layout_height="450dp"
+    android:layout_marginStart="50dp"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
+    android:layout_marginEnd="50dp"
+    android:background="@drawable/rounded_corners">
 
+    <!-- Guideline for stars -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <!-- Guideline for owner icon image view -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineOwnerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <!-- Gold star icon -->
+    <ImageView
+        android:id="@+id/starIconImageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/star96"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineStars"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/descriptive_text"/>
+
+    <!-- Repository star count -->
+    <TextView
+        android:id="@+id/starCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/starIconImageView"
+        app:layout_constraintBottom_toBottomOf="@id/starIconImageView"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Owner icon image view -->
+    <ImageView
+        android:id="@+id/ownerIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineStars"
+        app:layout_constraintBottom_toTopOf="@id/guidelineOwnerIcon"
+        app:shapeAppearanceOverlay="@style/BoxImageViewShapeAppearance"
+        android:contentDescription="@string/descriptive_text" />
+
+    <!-- Repository name view -->
     <TextView
         android:id="@+id/repositoryNameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp"
+        android:gravity="center"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineOwnerIcon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

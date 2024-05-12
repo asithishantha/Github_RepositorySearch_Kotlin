@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="stars_count">
+        <item quantity="one">%d star</item>
+        <item quantity="other">%d stars</item>
+    </plurals>
+
+    <plurals name="watchers_count">
+        <item quantity="one">%d watcher</item>
+        <item quantity="other">%d watchers</item>
+    </plurals>
+
+    <plurals name="forks_count">
+        <item quantity="one">%d fork</item>
+        <item quantity="other">%d forks</item>
+    </plurals>
+
+    <plurals name="open_issues_count">
+        <item quantity="one">%d open issue</item>
+        <item quantity="other">%d open issues</item>
+    </plurals>
+</resources>
