@@ -7,16 +7,16 @@ REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧でき�
 ## アプリの操作流れは下記の通りです。
 
 本アプリは GitHub のリポジトリを検索するアプリです。
-1. Splash画面<span style="margin-right: 3cm;">&nbsp;</span>2. Search画面<span style="margin-right: 3cm;">&nbsp;</span>3. ローデイング画面<br>
+ 1.Splash画面<span style="margin-right: 3cm;">&nbsp;</span>2. Search画面<span style="margin-right: 3cm;">&nbsp;</span>3. ローデイング画面<br>
    <img src="docs/splash.gif" width="150" style="margin-right: 3cm;"><img src="docs/search.gif" width="150" style="margin-right: 3cm;"><img src="docs/loading.gif" width="150"><br>
 
-4. Background変更<span style="margin-right: 3cm;">&nbsp;</span>5. 検索結果画面<span style="margin-right: 3cm;">&nbsp;</span>6. 検索結果が0件の場合の画面<br>
+ 4.Background変更<span style="margin-right: 3cm;">&nbsp;</span>5. 検索結果画面<span style="margin-right: 3cm;">&nbsp;</span>6. 検索結果が0件の場合の画面<br>
    <img src="docs/screen-change.gif" width="150" style="margin-right: 3cm;"><img src="docs/search-results.gif" width="150" style="margin-right: 3cm;"><img src="docs/valid-search.gif" width="150"><br>
 
-7. #コード許可なしエラーメッセージ<span style="margin-right: 3cm;">&nbsp;</span>8. 検索結果詳細画面<span style="margin-right: 3cm;">&nbsp;</span>9. ユーザーの他のリポジトリ情報表示<br>
+ 7.#コード許可なしエラーメッセージ<span style="margin-right: 3cm;">&nbsp;</span>8. 検索結果詳細画面<span style="margin-right: 3cm;">&nbsp;</span>9. ユーザーの他のリポジトリ情報表示<br>
    <img src="docs/nohash.gif" width="150" style="margin-right: 3cm;"><img src="docs/navto detail.gif" width="150" style="margin-right: 3cm;"><img src="docs/other-repo-fromm-user.gif" width="150"><br>
 
-10. URLをクリップボードにコピーする機能<span style="margin-right: 3cm;">&nbsp;</span>11. URLを他のアプリで共有する機能<span style="margin-right: 3cm;">&nbsp;</span>12. リポジトリをブラウザで直接開く機能<br>
+ 8.URLをクリップボードにコピーする機能<span style="margin-right: 3cm;">&nbsp;</span>11. URLを他のアプリで共有する機能<span style="margin-right: 3cm;">&nbsp;</span>12. リポジトリをブラウザで直接開く機能<br>
     <img src="docs/copy-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/share-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/open-in-web.gif" width="150"><br>
 
 
