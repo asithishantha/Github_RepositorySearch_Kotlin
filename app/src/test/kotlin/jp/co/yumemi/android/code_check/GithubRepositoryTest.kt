@@ -14,7 +14,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GithubRepositoryTest {

@@ -8,10 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.model.RepositoryItem
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
-import java.util.logging.Logger
-
 class RepositoryDetailFragmentTest {
 
     @Test
@@ -28,8 +24,8 @@ class RepositoryDetailFragmentTest {
         )
 
         // Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
-            fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
+        launchFragmentInContainer<RepositoryDetailFragment>(
+            RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
 
@@ -66,7 +62,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
@@ -99,7 +95,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
@@ -126,7 +122,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
@@ -150,7 +146,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
@@ -202,7 +198,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Act: Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
@@ -226,7 +222,7 @@ class RepositoryDetailFragmentTest {
         )
 
         // Act: Launch the fragment with the mock RepositoryItem as an argument
-        val fragmentScenario = launchFragmentInContainer<RepositoryDetailFragment>(
+        launchFragmentInContainer<RepositoryDetailFragment>(
             fragmentArgs = RepositoryDetailFragmentArgs(repositoryItem).toBundle(),
             themeResId = R.style.Theme_AndroidEngineerCodeCheck
         )
