@@ -31,234 +31,151 @@ import kotlinx.coroutines.launch
  * RepositoryDetailFragmentは、リポジトリの詳細を表示するFragmentです。
  * リポジトリの詳細情報を表示し、検索した日時をログに出力します。
  */
-class RepositoryDetailFragment : Fragment(R.layout.repository_detail_fragment) {
+class RepositoryDetailFragment : Fragment() {
     private val args: RepositoryDetailFragmentArgs by navArgs()
     private var _binding: RepositoryDetailFragmentBinding? = null
-    private val binding: RepositoryDetailFragmentBinding
-        get() = _binding
-            ?: throw IllegalStateException("FragmentのビューバインデングがonCreateViewの前、またはonDestroyViewの後にアクセスされました。")
+    private val binding get() = _binding!!
 
+    // GithubRepositoryのインスタンスを遅延初期化する
+    private val githubRepository: GithubRepository by lazy {
+        GithubRepository(HttpClient())
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = RepositoryDetailFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     /**
-     * onViewCreatedは、Viewが生成された直後に呼び出されます。
-     * レイアウトのバインディングやリポジトリの詳細情報の表示を行います。
+     * Viewが生成された直後に呼び出される。
+     * UIの初期設定やイベントリスナーの設定を行う。
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val item = args.item
-        with(binding) {
-            if (item.ownerIconUrl.isEmpty()) {
-                ownerIconView.setImageResource(R.drawable.unknown)
-            } else {
-                ownerIconView.load(item.ownerIconUrl)
-            }
-            nameView.text = item.name.ifEmpty { getString(R.string.no_name_available) }
-            languageView.text = item.language.ifEmpty { getString(R.string.language_unknown) }
-            starsView.text = resources.getQuantityString(
-                R.plurals.stars_count,
-                item.stargazersCount.toInt(),
-                item.stargazersCount.toInt()
-            )
-            watchersView.text = resources.getQuantityString(
-                R.plurals.watchers_count,
-                item.watchersCount.toInt(),
-                item.watchersCount.toInt()
-            )
-            forksView.text = resources.getQuantityString(
-                R.plurals.forks_count,
-                item.forksCount.toInt(),
-                item.forksCount.toInt()
-            )
-            openIssuesView.text = resources.getQuantityString(
-                R.plurals.open_issues_count,
-                item.openIssuesCount.toInt(),
-                item.openIssuesCount.toInt()
-            )
-        }
+        updateUIWithRepositoryItem(item)
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        val repositoryUrl = "https://github.com/${args.item.name}"
+        // オーナー名を取得するための修正が必要です。例えば、以下のようにします。
+        val owner = item.name.substringBefore('/')
 
-        binding.openInWebButton.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl))
-            startActivity(browserIntent)
-        }
-
-        binding.copyUrlButton.setOnClickListener {
-            val clipboard =
-                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Repository URL", repositoryUrl)
-            clipboard.setPrimaryClip(clip)
-
-            // Display Snackbar with confirmation message
-            val snackbar = Snackbar.make(it, "URL copied to clipboard", Snackbar.LENGTH_SHORT)
-
-            snackbar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.snackbar_background_color
-                )
-            ) // Replace with your desired color
-
-            // Set the text color of the Snackbar
-            snackbar.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.white
-                )
-            ) // Replace with your desired color
-
-            // Show the Snackbar
-            snackbar.show()
-        }
-
-        binding.shareButton.setOnClickListener {
-            val shareIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, repositoryUrl)
-                type = "text/plain"
-            }
-            startActivity(Intent.createChooser(shareIntent, "Share URL via"))
-        }
-
-        val owner = args.item.name.substringBefore('/')
         lifecycleScope.launch {
-            val userRepositories = getUserRepositories(owner)
-            val userItemsAdapter = UserItemsAdapter(userRepositories) { selectedItem ->
-                updateDetails(selectedItem)
+            // リポジトリの状態を取得し、適切に処理します。
+            when (val result = githubRepository.getRepositoriesByOwner(owner)) {
+                is RepositoryState.Success -> {
+                    setupUserItemsRecyclerView(result.data)
+                }
+                is RepositoryState.Error -> {
+                    showSnackbar("エラー: ${result.exception.localizedMessage}")
+                }
+                is RepositoryState.Empty -> {
+                    showSnackbar("リポジトリが見つかりませんでした。")
+                }
+                is RepositoryState.JsonParsingError -> {
+                    showSnackbar("JSON解析エラーが発生しました。")
+                }
+                // その他の状態に対する処理が必要な場合はここに追加します。
             }
-
-            binding.userItemsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = userItemsAdapter
-                val itemDecoration = SpaceItemDecoration(16)
-                addItemDecoration(itemDecoration)
-            }
-        }
-
-    }
-
-    class SpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect, view: View,
-            parent: RecyclerView, state: RecyclerView.State
-        ) {
-            outRect.left = space
-            outRect.right = space
-            outRect.top = space
-            outRect.bottom = space
         }
     }
 
-    private fun updateDetails(item: RepositoryItem) {
-        binding.apply {
-            // Update the owner icon
-            if (item.ownerIconUrl.isEmpty()) {
-                ownerIconView.setImageResource(R.drawable.unknown)
-            } else {
-                ownerIconView.load(item.ownerIconUrl)
+    /**
+     * リポジトリの詳細情報をUIに反映する。
+     */
+    private fun updateUIWithRepositoryItem(item: RepositoryItem) {
+        with(binding) {
+            ownerIconView.load(item.ownerIconUrl) {
+                placeholder(R.drawable.unknown)
+                error(R.drawable.unknown)
             }
-
-            // Update the repository name
             nameView.text = item.name.ifEmpty { getString(R.string.no_name_available) }
-
-            // Update the repository language
             languageView.text = item.language.ifEmpty { getString(R.string.language_unknown) }
+            starsView.text = getString(R.string.stars_count, item.stargazersCount)
+            watchersView.text = getString(R.string.watchers_count, item.watchersCount)
+            forksView.text = getString(R.string.forks_count, item.forksCount)
+            openIssuesView.text = getString(R.string.open_issues_count, item.openIssuesCount)
+            setupActionButtons(item)
+        }
+    }
 
-            // Update the stars count
-            starsView.text = resources.getQuantityString(
-                R.plurals.stars_count,
-                item.stargazersCount.toInt(), // Convert Long to Int
-                item.stargazersCount.toInt()
-            )
-
-            // Update the watchers count
-            watchersView.text = resources.getQuantityString(
-                R.plurals.watchers_count,
-                item.watchersCount.toInt(),
-                item.watchersCount.toInt()
-            )
-
-            // Update the forks count
-            forksView.text = resources.getQuantityString(
-                R.plurals.forks_count,
-                item.forksCount.toInt(),
-                item.forksCount.toInt()
-            )
-
-            // Update the open issues count
-            openIssuesView.text = resources.getQuantityString(
-                R.plurals.open_issues_count,
-                item.openIssuesCount.toInt(),
-                item.openIssuesCount.toInt()
-            )
-
-            val repositoryUrl = "https://github.com/${item.name}"
-
+    /**
+     * アクションボタンの設定を行う。
+     */
+    private fun setupActionButtons(item: RepositoryItem) {
+        val repositoryUrl = "https://github.com/${item.name}"
+        binding.apply {
+            openInWebButton.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl)))
+            }
             copyUrlButton.setOnClickListener {
-                val clipboard =
-                    requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Repository URL", repositoryUrl)
                 clipboard.setPrimaryClip(clip)
-                Snackbar.make(it, "URL copied to clipboard", Snackbar.LENGTH_SHORT).show()
+                showSnackbar("URLをクリップボードにコピーしました")
             }
-
             shareButton.setOnClickListener {
                 val shareIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, repositoryUrl)
                     type = "text/plain"
                 }
-                startActivity(Intent.createChooser(shareIntent, "Share URL via"))
+                startActivity(Intent.createChooser(shareIntent, "URLを共有"))
             }
-
-            openInWebButton.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl))
-                startActivity(browserIntent)
-            }
-        }
-    }
-
-    // Add a property for GithubRepository in RepositoryDetailFragment
-    private val githubRepository: GithubRepository by lazy {
-        // Initialize GithubRepository with an HttpClient instance
-        // This is just an example, you should provide the HttpClient instance according to your DI setup
-        GithubRepository(HttpClient())
-    }
-
-    // Modify getUserRepositories to use GithubRepository
-    private suspend fun getUserRepositories(owner: String): List<RepositoryItem> {
-        return when (val result = githubRepository.getRepositoriesByOwner(owner)) {
-            is RepositoryState.Success -> result.data
-            is RepositoryState.Error -> {
-                // Handle error, show message to user
-                emptyList()
-            }
-
-            is RepositoryState.Empty -> emptyList()
-            else -> emptyList()
         }
     }
 
     /**
-     * onDestroyViewは、Viewが破棄される際に呼び出されます。
-     * バインディングの解除を行います。
+     * ユーザーのリポジトリ一覧をRecyclerViewに設定する。
+     */
+    private fun setupUserItemsRecyclerView(userRepositories: List<RepositoryItem>) {
+        val userItemsAdapter = UserItemsAdapter(userRepositories) { selectedItem ->
+            updateUIWithRepositoryItem(selectedItem)
+        }
+        binding.userItemsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = userItemsAdapter
+            addItemDecoration(SpaceItemDecoration(16))
+        }
+    }
+
+    /**
+     * Snackbarを表示してユーザーにメッセージを伝える。
+     */
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).apply {
+            setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.snackbar_background_color))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            show()
+        }
+    }
+
+    /**
+     * Viewが破棄される際に呼び出される。
+     * バインディングの解除を行う。
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding =
-            null  // Kotlinのsyntheticなどを使用している場合は、nullに設定します。View Bindingを使用している場合、通常は必要ありません。
+        _binding = null
+    }
+
+    /**
+     * RecyclerViewのアイテム間にスペースを追加するためのItemDecoration。
+     */
+    class SpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
+        ) {
+            with(outRect) {
+                left = space
+                right = space
+                top = space
+                bottom = space
+            }
+        }
     }
 }

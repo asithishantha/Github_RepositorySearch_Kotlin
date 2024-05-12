@@ -2,7 +2,7 @@
 buildscript {
     ext {
         // Define hilt_version here
-        hilt_version = '2.40.1'
+        hilt_version = '2.40.5'
         kotlin_version = '1.6.21'
     }
     repositories {
