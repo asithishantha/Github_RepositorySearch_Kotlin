@@ -1,5 +1,5 @@
 # 株式会社ゆめみ Android エンジニアコードチェック課題
-# REPOくん - レポーシトリを検索できるアプリ
+# REPOくん - リポジトリを検索できるアプリ
 <img src="docs/repo.png" width="150" height="150">
 
 REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧できるAndroidアプリです。直感的なUIと豊富な機能で、ユーザーが求めるリポジトリを簡単に見つけることができます。
@@ -16,7 +16,7 @@ REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧でき�
  7.#コード許可なしエラーメッセージ<span style="margin-right: 3cm;">&nbsp;</span>8. 検索結果詳細画面<span style="margin-right: 3cm;">&nbsp;</span>9. ユーザーの他のリポジトリ情報表示<br>
    <img src="docs/nohash.gif" width="150" style="margin-right: 3cm;"><img src="docs/navto detail.gif" width="150" style="margin-right: 3cm;"><img src="docs/other-repo-fromm-user.gif" width="150"><br>
 
- 8.URLをクリップボードにコピーする機能<span style="margin-right: 3cm;">&nbsp;</span>11. URLを他のアプリで共有する機能<span style="margin-right: 3cm;">&nbsp;</span>12. リポジトリをブラウザで直接開く機能<br>
+ 10.URLをクリップボードにコピーする機能<span style="margin-right: 3cm;">&nbsp;</span>11. URLを他のアプリで共有する機能<span style="margin-right: 3cm;">&nbsp;</span>12. リポジトリをブラウザで直接開く機能<br>
     <img src="docs/copy-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/share-link.gif" width="150" style="margin-right: 3cm;"><img src="docs/open-in-web.gif" width="150"><br>
 
 
@@ -46,12 +46,20 @@ REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧でき�
 
 ### 今後の予定
 
-ステップ2では、以下の改善を行う予定です。
-
-- 単体テストとUIテストの更新
-- Roomデータベースの導入
-- ログイン機能とユーザー登録機能の追加
-
-これらの機能は、アプリの使い勝手をさらに向上させ、ユーザーにとってより魅力的なものにするためのものです。
+ステップ2のリリースに向けてmainからdev-step2ブランチ切って、以下の改善を行ってます。
+<br>
+単体テストとUIテストの更新：品質保証を強化し、安定したアプリの提供を目指します。
+画面回転対応：デバイスの回転に柔軟に対応し、ユーザビリティを高めます。
+ダークモード対応：ユーザーのシステム設定に合わせたダークモード表示を実現します。
+テストの自動化：CI/CDパイプラインを通じて、ビルドとテストのプロセスを自動化し、迅速かつ確実なリリースサイクルを実現することを目指しています。
+ProGuard設定の改善：リリースビルドの難読化を強化し、セキュリティを向上させるためにProGuardのルールを見直し、更新します。
+<br>
+ステップ3のリリースでは、アプリに以下の新機能を導入することを目指しています。
+<br>
+Roomデータベースの導入：効率的なデータ管理とオフライン機能の向上を目指し、Roomデータベースを利用したデータ永続化を実装します。
+ログイン機能とユーザー登録機能の追加：よりセキュアなユーザー体験を提供するために、認証機能を強化します。
+Jetpack Composeの採用：最新のUI開発フレームワークを使用して、アプリのUIを再構築し、よりモダンでレスポンシブなデザインを実現します。
+<br>
+これらの取り組みにより、REPOくんはより使いやすく、信頼性の高いアプリへと進化を遂げることでしょう。ユーザーの皆様には、今後のアップデートを楽しみにしていただければ幸いです。
 
 ---
