@@ -1,0 +1,3 @@
+<resources>
+    <attr name="iconTint" format="color" />
+</resources>

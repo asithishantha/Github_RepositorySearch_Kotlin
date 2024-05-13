@@ -8,10 +8,10 @@
     android:importantForAutofill="no"
     android:padding="16dp"
     app:endIconMode="clear_text"
-    app:endIconTint="@color/black"
+    app:endIconTint="@color/textColorPrimary"
     app:hintTextAppearance="@style/HintTextAppearance"
     app:startIconDrawable="@android:drawable/ic_menu_search"
-    app:startIconTint="@color/black">
+    app:startIconTint="?attr/iconTint">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/searchInputText"
@@ -26,7 +26,7 @@
         android:paddingTop="12dp"
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
-        android:textColor="@color/black"
+        android:textColor="@color/textColorPrimary"
         android:textCursorDrawable="@null"
         android:textSize="13sp" />
 </com.google.android.material.textfield.TextInputLayout>

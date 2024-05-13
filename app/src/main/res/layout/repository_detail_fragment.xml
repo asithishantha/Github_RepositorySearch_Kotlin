@@ -32,7 +32,7 @@
         android:layout_marginTop="28dp"
         android:src="@drawable/unknown"
         app:civ_border_width="2dp"
-        app:civ_border_color="@color/black"
+        app:civ_border_color="@color/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -238,6 +238,7 @@
                     android:id="@+id/copyUrlButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:tint="?attr/iconTint"
                     android:src="@drawable/baseline_content_copy_24"
                     android:contentDescription="@string/copy_url"
                     android:background="?attr/selectableItemBackgroundBorderless" />
@@ -251,6 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_share_24"
+                    app:tint="?attr/iconTint"
                     android:contentDescription="@string/share"
                     android:background="?attr/selectableItemBackgroundBorderless" />
             </LinearLayout>

@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.AndroidEngineerCodeCheck" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnPrimary">@color/backgroundColor</item>
+        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
+        <item name="iconTint">@color/iconTint</item>
+        <item name="colorOnSecondary">@color/textColorPrimary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:windowFullscreen">true</item>
@@ -40,7 +40,7 @@
         <item name="android:windowMinWidthMajor">80%</item>
         <item name="android:windowMinWidthMinor">80%</item>
         <!-- Custom text color and size -->
-        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
         <item name="android:textSize">16sp</item>
     </style>
 </resources>
