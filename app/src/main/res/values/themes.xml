@@ -3,7 +3,7 @@
     <style name="Theme.AndroidEngineerCodeCheck" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorOnPrimary">@color/backgroundColor</item>
         <item name="android:textColorPrimary">?attr/colorOnSurface</item>
-        <item name="iconTint">?attr/iconTint</item>
+        <item name="iconTint">@color/iconTint</item>
         <item name="colorOnSecondary">@color/textColorPrimary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
