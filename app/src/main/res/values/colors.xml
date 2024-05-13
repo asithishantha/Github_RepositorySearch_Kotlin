@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!--    black-->
+    <color name="textColorPrimary">#FF000000</color>
+    <color name="colorOnSurface">#FF000000</color>
+    <color name="iconTint">#FF000000</color>
+    <!--    white-->
+    <color name="backgroundColor">#FFFFFFFF</color>
     <color name="errorColor">#B00020</color>
     <color name="grey">#E0E0E0</color>
     <color name="snackbar_background_color">#BDBDBD</color>
+    <color name="snackbar_text_light">#FFFFFF</color>
 </resources>

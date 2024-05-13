@@ -8,9 +8,9 @@
     android:layout_height="wrap_content"
     android:importantForAutofill="no"
     app:endIconMode="clear_text"
-    app:endIconTint="@color/black"
+    app:endIconTint="@color/textColorPrimary"
     app:startIconDrawable="@android:drawable/ic_menu_search"
-    app:startIconTint="@color/black"
+    app:startIconTint="?attr/iconTint"
     app:hintTextAppearance="@style/HintTextAppearance"
     android:padding="16dp">
 
@@ -23,7 +23,7 @@
     android:imeOptions="actionSearch"
     android:inputType="text"
     android:maxLines="1"
-    android:textColor="@color/black"
+    android:textColor="@color/textColorPrimary"
     android:textCursorDrawable="@null"
     android:textSize="13sp"
     android:paddingStart="16dp"

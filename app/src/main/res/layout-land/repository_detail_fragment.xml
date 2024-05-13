@@ -36,7 +36,7 @@
             android:layout_height="120dp"
             android:layout_marginTop="28dp"
             android:src="@drawable/unknown"
-            app:civ_border_color="@color/black"
+            app:civ_border_color="@color/textColorPrimary"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -253,6 +253,7 @@
                         android:id="@+id/copyUrlButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:tint="?attr/iconTint"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/copy_url"
                         android:src="@drawable/baseline_content_copy_24" />
@@ -265,6 +266,7 @@
                         android:id="@+id/shareButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:tint="?attr/iconTint"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/share"
                         android:src="@drawable/baseline_share_24" />

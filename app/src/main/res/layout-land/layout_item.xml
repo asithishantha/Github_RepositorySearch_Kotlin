@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/black"
+        android:textColor="@color/textColorPrimary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/starIconImageView"
         app:layout_constraintEnd_toStartOf="@id/starIconImageView" />
@@ -62,7 +62,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/textColorPrimary"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

@@ -18,6 +18,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:tint="?attr/iconTint"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/close_button_description"
         app:layout_constraintEnd_toEndOf="parent"

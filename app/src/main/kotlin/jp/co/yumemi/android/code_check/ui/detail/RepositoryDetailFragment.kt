@@ -149,7 +149,7 @@ class RepositoryDetailFragment : Fragment() {
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).apply {
             setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.snackbar_background_color))
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.backgroundColor))
             show()
         }
     }
