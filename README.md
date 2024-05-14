@@ -30,6 +30,35 @@ REPOくんはGitHubのリポジトリを検索し、詳細情報を閲覧でき�
 - minSdk：23
 - targetSdk：33
 
+### 主要ライブラリと依存関係
+- Android Gradle プラグイン: バージョン 8.3.2
+- Kotlin Gradle プラグイン: バージョン 1.6.21
+- Navigation Safe Args Gradle プラグイン: バージョン 2.5.3
+- Dagger Hilt Gradle プラグイン: バージョン 2.40.5
+- Kotlin All Open: バージョン 1.6.21
+- Ktlint Gradle プラグイン: バージョン 10.2.0
+- AndroidX Core KTX: バージョン 1.6.0
+- AndroidX AppCompat: バージョン 1.3.1
+- Google Material Design: バージョン 1.4.0
+- AndroidX ConstraintLayout: バージョン 2.1.1
+- AndroidX RecyclerView: バージョン 1.2.1
+- AndroidX Lifecycle コンポーネント: バージョン 2.5.1
+- AndroidX Navigation コンポーネント: バージョン 2.5.3
+- Kotlin Coroutines: バージョン 1.6.1
+- Ktor Client Android: バージョン 1.6.4
+- Coil: バージョン 1.3.2
+- AndroidSVG: バージョン 1.4
+- CarouselRecyclerView: バージョン 1.2.6
+- CircleImageView: バージョン 3.1.0
+- Lottie: バージョン 3.4.0
+- Glide: バージョン 4.12.0
+- Dagger Hilt: バージョン 2.40.5
+
+### インストール方法
+- リポジトリをクローンする: git clone https://github.com/asithishantha/android-engineer-codecheck-asith.git
+- Android Studioでプロジェクトを開く。
+- エミュレータまたは実機でアプリをビルドして実行する。
+
 ### 最近のアップデート
 
 アプリは以下のPull Requestを通じて、様々な改善と新機能が追加されました。
