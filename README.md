@@ -1,4 +1,3 @@
-# 株式会社ゆめみ Android エンジニアコードチェック課題
 # REPOくん - リポジトリを検索できるアプリ
 <img src="docs/repo.png" width="150" height="150">
 
